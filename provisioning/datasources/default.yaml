@@ -1,0 +1,15 @@
+apiVersion: 1
+
+deleteDatasources:
+- name: GrafanaClickHouse
+
+datasources:
+- name: GrafanaClickHouse
+  type: grafana-clickhouse-datasource
+  jsonData:
+    port: 8123
+    protocol: http
+    server: host.docker.internal
+    username: default
+  secureJsonData:
+    password: password
