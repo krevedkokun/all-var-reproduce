@@ -61,7 +61,7 @@ function Page() {
           }}
           query={{
             refId: 'Scope',
-            rawSql: `select $__conditionalAll(arrayJoin(['one', 'two', 'three']), $tx_type)`,
+            rawSql: `select $__conditionalAll(arrayJoin(['one', 'two', 'three', \${tx_type}]), \${tx_type}), \${tx_type}`,
           }}
           initialValue='$__all'
           isMulti
