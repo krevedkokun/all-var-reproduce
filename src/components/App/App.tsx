@@ -8,6 +8,7 @@ import {
   RefreshPicker,
   SceneContextProvider,
   useQueryRunner,
+  useVariableInterpolator,
   VariableControl,
   VizPanel,
 } from '@grafana/scenes-react';
@@ -41,6 +42,36 @@ function Table() {
   );
 }
 
+function PageContent() {
+  const interpolate = useVariableInterpolator({});
+  return (
+    <QueryVariable
+      name={'scope'}
+      datasource={{
+        type: 'grafana-clickhouse-datasource',
+        uid: 'P1CEE5E10C8D5F211'
+      }}
+      query={{
+        refId: 'Scope',
+        rawSql: interpolate(`select $__conditionalAll(arrayJoin(['one', 'two', 'three', \${tx_type}]), \${tx_type}), \${tx_type}`),
+      }}
+      initialValue='$__all'
+      isMulti
+      includeAll
+    >
+      <Stack direction='column'>
+        <Stack>
+          <VariableControl name='tx_type'/>
+          <VariableControl name='scope'/>
+        </Stack>
+        <Stack height='400px'>
+          <Table/>
+        </Stack>
+      </Stack>
+    </QueryVariable>
+  );
+}
+
 function Page() {
   const pageNav = { text: 'Home' };
   return (
@@ -53,30 +84,7 @@ function Page() {
         includeAll
         initialValue='$__all'
       >
-        <QueryVariable
-          name={'scope'}
-          datasource={{
-            type: 'grafana-clickhouse-datasource',
-            uid: 'P1CEE5E10C8D5F211'
-          }}
-          query={{
-            refId: 'Scope',
-            rawSql: `select $__conditionalAll(arrayJoin(['one', 'two', 'three', \${tx_type}]), \${tx_type}), \${tx_type}`,
-          }}
-          initialValue='$__all'
-          isMulti
-          includeAll
-        >
-          <Stack direction='column'>
-            <Stack>
-              <VariableControl name='tx_type'/>
-              <VariableControl name='scope'/>
-            </Stack>
-            <Stack height='400px'>
-              <Table/>
-            </Stack>
-          </Stack>
-        </QueryVariable>
+        <PageContent/>
       </CustomVariable>
     </PluginPage>
   );
